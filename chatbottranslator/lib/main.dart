@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -35,6 +36,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
   final _speech = stt.SpeechToText();
   final _tts = FlutterTts();
 
+  final TextEditingController _inputTextController = TextEditingController();
   final _inputTextNotifier = ValueNotifier<String>('');
 
   String _selectedLanguage = 'en-GB';
@@ -71,7 +73,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
       _speech.listen(onResult: (result) {
         setState(() {
           _inputTextNotifier.value = result.recognizedWords;
-          _translate();
+          _inputTextController.text = result.recognizedWords;
         });
       });
     }
@@ -88,57 +90,209 @@ class _ChatBotPageState extends State<ChatBotPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ChatBot Translator'),
+        title: const Text(
+          'ChatBot Translator',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
+            letterSpacing: 1.5,
+          ),
+        ),
+        centerTitle: false,
         actions: [
-          DropdownButton<String>(
-            value: _selectedLanguage,
-            items: const [
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/usa.png'), height: 20),
-                value: 'en-US',
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: DropdownButtonHideUnderline (
+              child: DropdownButton<String>(
+                value: _selectedLanguage,
+                borderRadius: BorderRadius.circular(20),
+                icon: null,
+                autofocus: false,
+                focusColor: const Color.fromRGBO(0, 0, 0, 0.0),
+                underline: null,
+                elevation: 4,
+                items: [
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/usa.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'English (US)',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'en-US',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/uk.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'English (UK)',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'en-GB',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/spain.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'Español',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'es',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/france.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'Français',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'fr',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/brazil.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'Português (BR)',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'pt-BR',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/germany.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'Deutsch',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'de',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/italy.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          'Italiano',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'it',
+                  ),
+                  DropdownMenuItem(
+                    child: Row(
+                      children: const [
+                        SizedBox(width: 25),
+                        Image(
+                          image: AssetImage('assets/flags/japan.png'),
+                          height: 30,
+                        ),
+                        SizedBox(width: 25),
+                        Text(
+                          '日本語',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Montserrat',
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: 'ja',
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedLanguage = value!;
+                  });
+                },
               ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/uk.png'), height: 20),
-                value: 'en-GB',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/spain.png'), height: 20),
-                value: 'es',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/france.png'), height: 20),
-                value: 'fr',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/brazil.png'), height: 20),
-                value: 'pt-BR',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/germany.png'), height: 20),
-                value: 'de',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/italy.png'), height: 20),
-                value: 'it',
-              ),
-              DropdownMenuItem(
-                child: Image(
-                    image: AssetImage('assets/flags/japan.png'), height: 20),
-                value: 'ja',
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                _selectedLanguage = value!;
-              });
-            },
+            ),
           ),
         ],
       ),
@@ -169,6 +323,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    controller: _inputTextController,
                     decoration: InputDecoration(
                       hintText: 'Digite seu texto aqui',
                       border: OutlineInputBorder(
